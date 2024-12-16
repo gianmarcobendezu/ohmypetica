@@ -20,26 +20,96 @@
     <body class="font-sans antialiased">
         <x-banner />
 
-        <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
+        <div class="min-h-screen flex flex-col md:flex-row">
+            <!-- Sidebar -->
+            <div class="w-full md:w-64 bg-gray-100 text-white flex flex-col bg-white md:static" x-data="{ open: false }">
+                <!-- Mobile Hamburger Button -->
+                <button 
+                    class="p-4 bg-gray-100 text-gray-700 md:hidden focus:outline-none"
+                    @click="open = !open">
+                    <!-- Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5M3.75 12h16.5m-16.5 6.75h16.5" />
+                    </svg>
+                </button>
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
+                <!-- Menu -->
+                <div 
+                    :class="{ 'hidden': !open }" 
+                    class="md:block md:flex-grow">
+                    <div class="flex items-center justify-center p-6 bg-white">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-16 h-16">
                     </div>
-                </header>
-            @endif
+                    <nav class="flex-grow">
+                        <ul>
+                            <!-- Dashboard -->
+                            <li>
+                                <a href="{{ route('dashboard') }}" 
+                                   class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-700 hover:text-white">
+                                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h11M9 21V3M21 16h-5m0 0l-5-5m5 5l5-5" />
+                                </svg>  
+                                   Dashboard
+                                </a>
+                            </li>
+                            <!-- Profile -->
+                            <li>
+                                <a href="{{ route('profile.show') }}" 
+                                   class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-700 hover:text-white">
+                                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 19.364A9 9 0 1116.243 8.243m-2.12 9.9a3 3 0 11-4.243-4.243" />
+                                </svg> 
+                                   Perfil
+                                    
+                                </a>
+                            </li>
+                            <!-- Other links -->
+                            <li>
+                                <a href="#" 
+                                   class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-700 hover:text-white">
+                                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 3a6.75 6.75 0 016.75 6.75c0 3.83-3.076 6.753-6.826 7.11-.217.016-.434.024-.651.024C5.076 17.883 2 14.96 2 11.25a6.75 6.75 0 016.75-6.75zm5.252 2.9a.75.75 0 01.608-.842A4.243 4.243 0 0117.167 11H20.75a.75.75 0 010 1.5H16.25a4.25 4.25 0 01-4.25-4.25V7.5z" />
+                                </svg>
+                                    Configuraciones
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" 
+                                   class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-700 hover:text-white">
+                                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 3a6.75 6.75 0 016.75 6.75c0 3.83-3.076 6.753-6.826 7.11-.217.016-.434.024-.651.024C5.076 17.883 2 14.96 2 11.25a6.75 6.75 0 016.75-6.75zm5.252 2.9a.75.75 0 01.608-.842A4.243 4.243 0 0117.167 11H20.75a.75.75 0 010 1.5H16.25a4.25 4.25 0 01-4.25-4.25V7.5z" />
+                                </svg> 
+                                   Ayuda
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+            <!-- Main Content -->
+            <div class="flex-1 bg-gray-100">
+                <!-- Page Heading -->
+                @if (isset($header))
+                    <header class="bg-white shadow">
+                        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                            {{ $header }}
+                        </div>
+                    </header>
+                @endif
+
+                <!-- Page Content -->
+                <main>
+                    {{ $slot }}
+                </main>
+            </div>
         </div>
 
         @stack('modals')
 
         @livewireScripts
+
+        <!-- AlpineJS para manejar la interacción -->
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     </body>
 </html>
