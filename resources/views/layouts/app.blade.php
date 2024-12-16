@@ -82,6 +82,14 @@
                                    Ayuda
                                 </a>
                             </li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="block w-full text-left px-4 py-2 hover:bg-red-600 text-red-500 hover:text-white">
+                                        Cerrar Sesión
+                                    </button>
+                                </form>
+                            </li>
                         </ul>
                     </nav>
                 </div>
@@ -106,10 +114,13 @@
         </div>
 
         @stack('modals')
+<!---
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+-->
 
         @livewireScripts
-
+        
         <!-- AlpineJS para manejar la interacción -->
-        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        
     </body>
 </html>
