@@ -10,6 +10,6 @@ class ClinicalHistory extends Model
     protected $fillable = [
         'pet_name', 'breed', 'birth_date', 'service', 
         'observation', 'owner_name', 'phone1', 'phone2', 
-        'rate', 'payment_method'
+        'rate', 'payment_method','status'
     ];
 }

@@ -12,9 +12,13 @@ class ClinicalHistoryComponent extends Component
     public $pet_name, $breed, $birth_date, $service, $observation, $owner_name, $phone1, $phone2, $rate, $payment_method;
     public $selected_id;
     public $isOpen = false;
-    public $search;
+    public $searchTerm;
     public $page = 1; // Ensure to handle pagination state
 
+    public $selectedHistory=null;
+    public $showModal = false;
+    public $confirmingDelete = false;
+    public $deleteId = null;
 
     protected $rules = [
         'pet_name' => 'required|string',
@@ -29,12 +33,41 @@ class ClinicalHistoryComponent extends Component
         'payment_method' => 'required|string',
     ];
 
+    public function mount()
+    {
+        $this->showModal=false;
+        $this->loadData();
+    }
+
+    public function loadData()
+    {
+        $this->clinicalHistories = ClinicalHistory::where('status', 1)->get();
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->deleteId = $id;
+        $this->confirmingDelete = true; // Activa el modal
+    }
+
     public function render()
     {
+        /*
         $this->clinicalHistories = ClinicalHistory::where('pet_name', 'like', '%'.$this->search.'%')
         ->get();
 
-        return view('livewire.clinical-history');
+        return view('livewire.clinical-history')->layout("layouts.app");
+        */
+        $this->clinicalHistories = ClinicalHistory::where('status', 1)->get(); // Mostrar solo registros activos
+
+        /*
+        if ($this->search) {
+            $clinicalHistories = $clinicalHistories
+                ->where('pet_name', 'like', '%' . $this->search . '%')
+                ->orWhere('service', 'like', '%' . $this->search . '%');
+        }*/
+
+        return view('livewire.clinical-history')->layout('layouts.app');
 
     }
 
@@ -44,6 +77,18 @@ class ClinicalHistoryComponent extends Component
         $this->isOpen = true;
     }
 
+    public function showDetails($id)
+    {
+        $this->selectedHistory = ClinicalHistory::find($id);
+        $this->showModal = true; // Mostrar el modal
+    }
+
+    public function closeModal()
+    {
+        
+        $this->showModal = false; // Cerrar el modal
+        $this->selectedHistory = null;
+    }
 
     
     public function store()
@@ -68,8 +113,8 @@ class ClinicalHistoryComponent extends Component
 
         $this->isOpen = false;
         $this->resetInputFields();
-        $this->emit('closeModal');
-        $this->emit('refreshList');
+        //$this->emit('closeModal');
+        //$this->emit('refreshList');
         //$this->emit('refreshComponent'); // Esto puede ser útil si estás utilizando un modal o una interfaz dinámica
         
     }
@@ -92,9 +137,27 @@ class ClinicalHistoryComponent extends Component
         $this->isOpen = true;
     }
 
+    public function searchdata()
+    {
+        $this->clinicalHistories = ClinicalHistory::where('pet_name', 'like', '%'.$this->searchTerm.'%')
+        ->get();
+
+        return view('livewire.clinical-history')->layout("layouts.app");
+    }
+
     public function delete($id)
     {
-        ClinicalHistory::find($id)->delete();
+        //ClinicalHistory::find($id)->delete();
+        $clinicalHistory = ClinicalHistory::find($id);
+        if ($clinicalHistory) {
+            $clinicalHistory->update(['status' => 0]); // Cambiar el estado a 0
+        }
+
+        $this->confirmingDelete = false; // Cierra el modal
+        $this->deleteId = null; // Limpia el ID
+
+        // Opcional: Emitir un mensaje de éxito para el usuario
+        session()->flash('message', 'Registro eliminado correctamente.');
     }
 
     private function resetInputFields()
