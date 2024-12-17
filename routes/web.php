@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Livewire\ClinicalHistoryComponent;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -14,4 +15,8 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    //Route::get('/clinical-history', ClinicalHistoryComponent::class)->name('clinical-history');
+    Route::get('/historia-clinica', ClinicalHistoryComponent::class)->name('clinical-history');
+
 });
