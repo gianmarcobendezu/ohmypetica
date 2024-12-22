@@ -124,8 +124,9 @@
                         
 
                             <button wire:click="edit({{ $history->id }})" class="text-blue-500 hover:text-blue-700">Editar</button>
-                            
+                            @can('delete records')
                             <button wire:click="delete({{ $history->id }})" class="text-red-500 hover:text-red-700 ml-2">Eliminar</button>
+                            @endcan
                         </td>
                     </tr>
                 @endforeach
@@ -224,12 +225,18 @@
                             <td class="py-2 px-4">{{ $detail->payment_method }}</td>
                             <td class="py-2 px-4">{{ \Carbon\Carbon::parse($detail->service_datetime)->format('d/m/Y H:i') }}</td>
                             <td class="py-2 px-4">{{ $detail->observation }}</td>
+
                             <td class="py-2 px-4">
+                                @can('delete records')
+
                                 <button wire:click="deleteService({{ $detail->id }})"
                                         class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-700">
                                     Eliminar
                                 </button>
+                                
+                                @endcan
                             </td>
+
                         </tr>
                     @endforeach
                 </tbody>

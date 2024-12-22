@@ -47,6 +47,14 @@
                 </div>
             @endif
 
+            <label for="role">Rol:</label>
+            <select name="role" id="role">
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
+                    @endforeach
+            </select>
+
+
             <div class="flex items-center justify-end mt-4">
                 
                 <x-button class="ms-4">

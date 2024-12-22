@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use Spatie\Permission\Models\Role;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -20,7 +21,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        //Fortify::ignoreRoutes();
     }
 
     /**
@@ -33,6 +34,13 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
+        // Definir la vista de registro y pasar los roles
+        Fortify::registerView(function () {
+            $roles = Role::all(); // Obtener todos los roles desde la base de datos
+            return view('auth.register')->with('roles', $roles); // Pasar los roles correctamente
+        });
+
+      
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 

@@ -2,10 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Livewire\ClinicalHistoryComponent;
+use Spatie\Permission\Models\Role;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController; // Controlador de sesión para login
+
 
 Route::get('/', function () {
     return view('auth.login');
 });
+
 
 
 Route::middleware([
@@ -18,10 +22,18 @@ Route::middleware([
     })->name('dashboard');
 
 
+
+/*
     Route::get('/register', function () {
-        return view('auth.register');
+
+        $roles = Role::all(); // Obtener todos los roles
+    return view('auth.register', compact('roles'));
     })->name('register');
+    */
     
+
+
+
     //Route::get('/clinical-history', ClinicalHistoryComponent::class)->name('clinical-history');
     Route::get('/historia-clinica', ClinicalHistoryComponent::class)->name('clinical-history');
 

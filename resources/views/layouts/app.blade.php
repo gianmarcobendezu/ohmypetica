@@ -73,6 +73,7 @@
                                     Historia Clínica
                                 </a>
                             </li>
+                            @if(auth()->user()->hasRole('admin'))
                             <li>
                                 <a href="{{ route('register') }}" 
                                    class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-700 hover:text-white">
@@ -82,6 +83,7 @@
                                     Registrar Usuario
                                 </a>
                             </li>
+                            @endif
                             
                             <li>
                                 <a href="#" 

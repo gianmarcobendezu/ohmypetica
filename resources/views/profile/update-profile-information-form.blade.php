@@ -83,6 +83,19 @@
         </div>
     </x-slot>
 
+    @if(auth()->user()->hasRole('admin')) <!-- Mostrar campo de rol solo si el usuario es admin -->
+    <div class="mt-4">
+        <label for="role" value="{{ __('Role') }}" ></label>
+        <select id="role" name="role" class="mt-1 block w-full">
+            @foreach ($roles as $role)
+                <option value="{{ $role->name }}" @if($user->hasRole($role->name)) selected @endif>
+                    {{ ucfirst($role->name) }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    @endif
+
     <x-slot name="actions">
         <x-action-message class="me-3" on="saved">
             {{ __('Saved.') }}
