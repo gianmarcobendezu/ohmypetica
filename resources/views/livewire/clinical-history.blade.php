@@ -15,8 +15,8 @@
 
 
     @if($isOpen)
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
-            <div class="bg-white p-6 rounded shadow-md">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
+        <div class="bg-white p-6 rounded shadow-md w-full max-w-lg max-h-[90vh] overflow-y-auto mx-4 sm:mx-auto">
                 <h2 class="text-lg font-bold">Historia Clínica</h2>
 
                 <form wire:submit.prevent="store" class="space-y-4">
