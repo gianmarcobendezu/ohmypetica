@@ -7,6 +7,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -16,6 +17,11 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
+
+    Route::get('/register', function () {
+        return view('auth.register');
+    })->name('register');
+    
     //Route::get('/clinical-history', ClinicalHistoryComponent::class)->name('clinical-history');
     Route::get('/historia-clinica', ClinicalHistoryComponent::class)->name('clinical-history');
 

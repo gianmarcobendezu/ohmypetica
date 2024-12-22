@@ -12,4 +12,9 @@ class ClinicalHistory extends Model
         'observation', 'owner_name', 'phone1', 'phone2', 
         'rate', 'payment_method','status'
     ];
+
+    public function details()
+    {
+        return $this->hasMany(ClinicalHistoryDetail::class)->where('idestado', 1);
+    }
 }

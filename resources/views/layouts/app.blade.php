@@ -74,6 +74,16 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="{{ route('register') }}" 
+                                   class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-700 hover:text-white">
+                                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 19.364A9 9 0 1116.243 8.243m-2.12 9.9a3 3 0 11-4.243-4.243" />
+                                    </svg> 
+                                    Registrar Usuario
+                                </a>
+                            </li>
+                            
+                            <li>
                                 <a href="#" 
                                    class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-700 hover:text-white">
                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">

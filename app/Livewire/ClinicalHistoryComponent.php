@@ -4,12 +4,13 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\ClinicalHistory;
+use App\Models\ClinicalHistoryDetail;
 
 class ClinicalHistoryComponent extends Component
 {
 
     public $clinicalHistories;
-    public $pet_name, $breed, $birth_date, $service, $observation, $owner_name, $phone1, $phone2, $rate, $payment_method;
+    public $pet_name, $breed, $birth_date, $observation, $owner_name, $phone1, $phone2;
     public $selected_id;
     public $isOpen = false;
     public $searchTerm;
@@ -20,17 +21,23 @@ class ClinicalHistoryComponent extends Component
     public $confirmingDelete = false;
     public $deleteId = null;
 
+    
+    public $showDetailModal = false;
+    public $service;
+    public $rate;
+    public $payment_method;
+    public $service_datetime;
+    public $observationdetail;
+    public $clinicalHistoryId; // El id de la historia clínica seleccionada
+
     protected $rules = [
         'pet_name' => 'required|string',
         'breed' => 'required|string',
-        'birth_date' => 'required|date',
-        'service' => 'required|string',
+        'birth_date' => 'nullable|date',
         'observation' => 'nullable|string',
-        'owner_name' => 'required|string',
-        'phone1' => 'required|string',
-        'phone2' => 'nullable|string',
-        'rate' => 'required|numeric',
-        'payment_method' => 'required|string',
+        'owner_name' => 'nullable|string',
+        'phone1' => 'nullable|string',
+        'phone2' => 'nullable|string'
     ];
 
     public function mount()
@@ -71,6 +78,70 @@ class ClinicalHistoryComponent extends Component
 
     }
 
+    public function openDetailModal($id)
+    {
+        $this->clinicalHistoryId = $id;
+        $this->showDetailModal = true;
+    }
+
+    public function closeDetailModal()
+    {
+        $this->showDetailModal = false;
+        $this->resetForm(); // Reinicia el formulario si lo deseas
+    }
+
+    public function resetForm()
+    {
+        $this->service = '';
+        $this->rate = '';
+        $this->payment_method = '';
+        $this->service_datetime = '';
+        $this->observationdetail = '';
+    }
+
+    public function addDetail()
+    {
+        $this->validate([
+            'service' => 'required|string|max:255',
+            'rate' => 'required|numeric|min:0',
+            'payment_method' => 'required|string',
+            'service_datetime' => 'required|date',
+            'observation' => 'nullable|string',
+        ]);
+
+        // Crear el detalle de la historia clínica
+        ClinicalHistoryDetail::create([
+            'clinical_history_id' => $this->clinicalHistoryId,
+            'service' => $this->service,
+            'rate' => $this->rate,
+            'payment_method' => $this->payment_method,
+            'service_datetime' => $this->service_datetime,
+            'observation' => $this->observationdetail,
+        ]);
+
+        // Cerrar el modal y resetear el formulario
+        $this->closeDetailModal();
+
+        session()->flash('message', 'Detalle agregado exitosamente.');
+    }
+
+    public function deleteService($serviceId)
+    {
+        $service = ClinicalHistoryDetail::find($serviceId);
+
+        if ($service) {
+            $service->idestado = 0; // Cambiar el estado a 0
+            $service->save();
+    
+            session()->flash('message', 'Servicio eliminado correctamente.');
+        } else {
+            session()->flash('error', 'No se pudo encontrar el servicio.');
+        }
+    
+        // Actualiza los detalles mostrados en el modal
+        $this->selectedHistory->load('details');
+    }
+
     public function create()
     {
         $this->resetInputFields();
@@ -79,7 +150,9 @@ class ClinicalHistoryComponent extends Component
 
     public function showDetails($id)
     {
-        $this->selectedHistory = ClinicalHistory::find($id);
+        //$this->selectedHistory = ClinicalHistory::find($id);
+        $this->selectedHistory = ClinicalHistory::with('details')->find($id);
+
         $this->showModal = true; // Mostrar el modal
     }
 
@@ -98,14 +171,11 @@ class ClinicalHistoryComponent extends Component
         ClinicalHistory::updateOrCreate(['id' => $this->selected_id], [
             'pet_name' => $this->pet_name,
             'breed' => $this->breed,
-            'birth_date' => $this->birth_date,
-            'service' => $this->service,
+            'birth_date' => $this->birth_date ?: null, // Si está vacío, guardamos como null
             'observation' => $this->observation,
             'owner_name' => $this->owner_name,
             'phone1' => $this->phone1,
-            'phone2' => $this->phone2,
-            'rate' => $this->rate,
-            'payment_method' => $this->payment_method,
+            'phone2' => $this->phone2
         ]);
         
         session()->flash('message', 'Historia clínica guardada exitosamente.');
@@ -126,14 +196,11 @@ class ClinicalHistoryComponent extends Component
         $this->pet_name = $history->pet_name;
         $this->breed = $history->breed;
         $this->birth_date = $history->birth_date;
-        $this->service = $history->service;
         $this->observation = $history->observation;
         $this->owner_name = $history->owner_name;
         $this->phone1 = $history->phone1;
         $this->phone2 = $history->phone2;
-        $this->rate = $history->rate;
-        $this->payment_method = $history->payment_method;
-
+        
         $this->isOpen = true;
     }
 
@@ -165,13 +232,10 @@ class ClinicalHistoryComponent extends Component
         $this->pet_name = '';
         $this->breed = '';
         $this->birth_date = '';
-        $this->service = '';
         $this->observation = '';
         $this->owner_name = '';
         $this->phone1 = '';
         $this->phone2 = '';
-        $this->rate = '';
-        $this->payment_method = '';
         $this->selected_id = null;
     }
 
