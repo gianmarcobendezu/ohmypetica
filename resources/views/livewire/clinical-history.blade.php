@@ -207,7 +207,9 @@
 
             <!-- Tabla de Servicios Registrados -->
             <h3 class="text-lg font-semibold mt-4">Servicios Registrados</h3>
-            <table class="min-w-full bg-white border">
+            <div class="overflow-x-auto">
+
+            <table class="min-w-full divide-y divide-gray-200 bg-white border">
                 <thead>
                     <tr>
                         <th class="py-2 px-4">Servicio</th>
@@ -243,6 +245,7 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
             
                 <!-- Botón de Cerrar -->
                 <div class="mt-4 text-right">
