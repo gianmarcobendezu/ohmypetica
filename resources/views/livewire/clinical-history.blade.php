@@ -143,7 +143,16 @@
         <form wire:submit.prevent="addDetail">
             <div class="mb-4">
                 <label for="service" class="block text-sm font-medium text-gray-700">Servicio</label>
+                <!---
                 <input type="text" id="service" wire:model="service" class="block w-full border-gray-300 rounded-md">
+                -->
+                <select id="service" wire:model="service" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Seleccione un servicio</option>
+                    <option value="BAÑO">BAÑO</option>
+                    <option value="BAÑO Y CORTE">BAÑO Y CORTE</option>
+                    <option value="CORTE DE UÑAS">CORTE DE UÑAS</option>
+                    <option value="BAÑO - CORTE - PIGMENTACIÓN DE PELO">BAÑO - CORTE - PIGMENTACIÓN DE PELO</option>
+                </select>
             </div>
 
             <div class="mb-4">
