@@ -92,7 +92,7 @@
         @if($clinicalHistories)
         <table  id="clinicalHistoryTable" class="min-w-full table-auto border-collapse bg-white shadow-md rounded-lg">
             <thead class="bg-gray-200">
-                <tr>
+                <tr class="bg-gray-100">
                     <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">ID</th>
                     <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">Nombre de la Mascota</th>
                     <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">Raza</th>
@@ -146,12 +146,19 @@
                 <!---
                 <input type="text" id="service" wire:model="service" class="block w-full border-gray-300 rounded-md">
                 -->
+                <!---
                 <select id="service" wire:model="service" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">Seleccione un servicio</option>
                     <option value="BAÑO">BAÑO</option>
                     <option value="BAÑO Y CORTE">BAÑO Y CORTE</option>
                     <option value="CORTE DE UÑAS">CORTE DE UÑAS</option>
                     <option value="BAÑO - CORTE - PIGMENTACIÓN DE PELO">BAÑO - CORTE - PIGMENTACIÓN DE PELO</option>
+                </select>-->
+                <select id="service" wire:model="service" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Seleccione un servicio</option>
+                    @foreach(\App\Models\Service::all() as $service)
+                        <option value="{{ $service->name }}">{{ $service->name }}</option>
+                    @endforeach
                 </select>
             </div>
 
