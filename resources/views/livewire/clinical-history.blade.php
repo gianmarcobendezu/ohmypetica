@@ -86,6 +86,36 @@
         </div>
     @endif
     
+    <!-- Modal de Fotos -->
+    @if($showModalPhotos)
+    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl md:max-w-4xl lg:max-w-5xl relative">
+            <h2 class="text-lg font-semibold mb-4 text-center">Fotos de la Mascota</h2>
+    
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                @foreach($selectedPhotos as $photo)
+                    <div class="relative group">
+                        <!-- Imagen con ajuste de tamaño -->
+                        <img src="{{ asset('storage/' . $photo->photo_path) }}" 
+                             class="w-full h-auto max-h-80 object-cover rounded-lg shadow-lg cursor-pointer transition duration-300 transform hover:scale-105">
+    
+                        <!-- Botón para eliminar foto (solo en el modal) -->
+                        <button wire:click="deletePhoto({{ $photo->id }})"
+                                class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full opacity-75 hover:opacity-100 transition">
+                            ✖
+                        </button>
+                    </div>
+                @endforeach
+            </div>
+    
+            <!-- Botón para cerrar -->
+            <button wire:click="$set('showModalPhotos', false)"
+                    class="mt-4 px-4 py-2 bg-gray-500 text-white rounded block mx-auto">
+                Cerrar
+            </button>
+        </div>
+    </div>
+    @endif
     
     <!-- Tabla -->
     <div class="overflow-x-auto overflow-y-auto max-h-[500px]">
@@ -99,6 +129,9 @@
 
                     <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">Fecha de Nacimiento</th>
                     <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">Dueño</th>
+
+                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">Fotos</th>
+
                     <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">Acciones</th>
                 </tr>
             </thead>
@@ -110,6 +143,17 @@
                         <td class="py-3 px-4 text-sm text-gray-600">{{ $history->breed }}</td>
                         <td class="py-3 px-4 text-sm text-gray-600">{{ ($history->birth_date)  ? \Carbon\Carbon::parse($history->birth_date)->format('d/m/Y') : 'N/A' }}</td>
                         <td class="py-3 px-4 text-sm text-gray-600">{{ $history->owner_name }}</td>
+                            
+                        <!-- Mostrar Fotos -->
+                        <td class="py-3 px-4 text-sm">
+                            @if($history->photos->isNotEmpty())
+                                <img src="{{ asset('storage/' . $history->photos->first()->photo_path) }}" 
+                                     class="h-12 w-12 rounded-full cursor-pointer"
+                                     wire:click="openPhotoModal({{ $history->id }})">
+                            @else
+                                <span class="text-gray-400">No hay fotos</span>
+                            @endif
+                        </td>
 
                         <td class="py-3 px-4 text-sm">
                             <button  type="button" wire:click="showDetails({{ $history->id }})"
@@ -127,6 +171,16 @@
                             @can('delete records')
                             <button wire:click="delete({{ $history->id }})" class="text-red-500 hover:text-red-700 ml-2">Eliminar</button>
                             @endcan
+                                
+                            <div>
+                                <input type="file" id="fileInput{{ $history->id }}" class="hidden" wire:model="photos" multiple>
+                                <button type="button" onclick="document.getElementById('fileInput{{ $history->id }}').click();"
+                                    class="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-700"
+                                    wire:click="$set('selectedHistory', {{ $history->id }})">
+                                    Subir Fotos
+                                </button>
+                            </div>
+                            
                         </td>
                     </tr>
                 @endforeach

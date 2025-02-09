@@ -17,4 +17,9 @@ class ClinicalHistory extends Model
     {
         return $this->hasMany(ClinicalHistoryDetail::class)->where('idestado', 1);
     }
+    public function photos()
+    {
+        return $this->hasMany(ClinicalHistoryPhoto::class);
+    }
+
 }

@@ -6,9 +6,15 @@ use Livewire\Component;
 use App\Models\ClinicalHistory;
 use App\Models\ClinicalHistoryDetail;
 
+use App\Models\ClinicalHistoryPhoto;
+use Illuminate\Support\Facades\Storage;
+use Livewire\WithFileUploads;
+
+
 class ClinicalHistoryComponent extends Component
 {
-
+    use WithFileUploads;
+    public $photos = [];
     public $clinicalHistories;
     public $pet_name, $breed, $birth_date, $observation, $owner_name, $phone1, $phone2;
     public $selected_id;
@@ -20,7 +26,7 @@ class ClinicalHistoryComponent extends Component
     public $showModal = false;
     public $confirmingDelete = false;
     public $deleteId = null;
-
+    public $showModalPhotos=false;
     
     public $showDetailModal = false;
     public $service;
@@ -29,6 +35,9 @@ class ClinicalHistoryComponent extends Component
     public $service_datetime;
     public $observationdetail;
     public $clinicalHistoryId; // El id de la historia clínica seleccionada
+
+    public $selectedPhotos = [];
+
 
     protected $rules = [
         'pet_name' => 'required|string',
@@ -46,6 +55,13 @@ class ClinicalHistoryComponent extends Component
         $this->loadData();
     }
 
+    public function openPhotoModal($historyId)
+    {
+        $this->selectedPhotos = ClinicalHistoryPhoto::where('clinical_history_id', $historyId)->get();
+        $this->showModalPhotos = true;
+        
+    }
+
     public function loadData()
     {
         $this->clinicalHistories = ClinicalHistory::where('status', 1)->get();
@@ -57,6 +73,38 @@ class ClinicalHistoryComponent extends Component
         $this->confirmingDelete = true; // Activa el modal
     }
 
+    public function updatedPhotos()
+{
+    if ($this->selectedHistory) {
+        $historyId = $this->selectedHistory;
+        $folderPath = "photos/{$historyId}"; // Carpeta específica para cada historia
+
+        foreach ($this->photos as $photo) {
+            $filename = time() . '_' . $photo->getClientOriginalName();
+            $path = $photo->storeAs($folderPath, $filename, 'public');
+
+            ClinicalHistoryPhoto::create([
+                'clinical_history_id' => $historyId,
+                'photo_path' => "{$folderPath}/{$filename}" // Guardamos la ruta relativa
+            ]);
+        }
+
+        $this->photos = [];
+        // session()->flash('message', 'Fotos subidas con éxito.');
+    }
+}
+
+    public function deletePhoto($photoId)
+    {
+        $photo = ClinicalHistoryPhoto::findOrFail($photoId);
+        $historyId=$photo->clinical_history_id;
+        Storage::disk('public')->delete($historyId.'/'.$photo->photo_path);
+        $photo->delete();
+        
+        // Recargar imágenes después de eliminar
+        $this->selectedPhotos = ClinicalHistoryPhoto::where('clinical_history_id', $photo->clinical_history_id)->get();
+    }
+
     public function render()
     {
         /*
@@ -65,7 +113,7 @@ class ClinicalHistoryComponent extends Component
 
         return view('livewire.clinical-history')->layout("layouts.app");
         */
-        $this->clinicalHistories = ClinicalHistory::where('status', 1)->get(); // Mostrar solo registros activos
+        $this->clinicalHistories = ClinicalHistory::with('photos')->where('status', 1)->get(); // Mostrar solo registros activos
 
         /*
         if ($this->search) {
