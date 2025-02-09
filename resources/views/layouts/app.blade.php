@@ -52,6 +52,8 @@
                                    Dashboard
                                 </a>
                             </li>
+                            <!---- Estadistica -->
+                           
                             <!-- Profile -->
                             <li>
                                 <a href="{{ route('profile.show') }}" 
@@ -75,6 +77,16 @@
                             </li>
                             
                             @if(auth()->user()->hasRole('admin'))
+                            
+                            <li>
+                                <a href="{{ route('statistics') }}" 
+                                   class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-700 hover:text-white">
+                                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 3a6.75 6.75 0 016.75 6.75c0 3.83-3.076 6.753-6.826 7.11-.217.016-.434.024-.651.024C5.076 17.883 2 14.96 2 11.25a6.75 6.75 0 016.75-6.75zm5.252 2.9a.75.75 0 01.608-.842A4.243 4.243 0 0117.167 11H20.75a.75.75 0 010 1.5H16.25a4.25 4.25 0 01-4.25-4.25V7.5z" />
+                                </svg>
+                                    Estadística
+                                </a>
+                            </li>
 
                             <li>
                                 <a href="{{ route('services') }}" 
