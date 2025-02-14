@@ -64,7 +64,10 @@ class ClinicalHistoryComponent extends Component
 
     public function loadData()
     {
-        $this->clinicalHistories = ClinicalHistory::where('status', 1)->get();
+        $this->clinicalHistories = ClinicalHistory::where('status', 1)->orderBy('id', 'desc')->get();
+
+        
+
     }
 
     public function confirmDelete($id)
@@ -113,7 +116,7 @@ class ClinicalHistoryComponent extends Component
 
         return view('livewire.clinical-history')->layout("layouts.app");
         */
-        $this->clinicalHistories = ClinicalHistory::with('photos')->where('status', 1)->get(); // Mostrar solo registros activos
+        $this->clinicalHistories = ClinicalHistory::with('photos')->where('status', 1)->orderBy('id', 'desc')->get(); // Mostrar solo registros activos
 
         /*
         if ($this->search) {
@@ -267,7 +270,7 @@ class ClinicalHistoryComponent extends Component
         if ($clinicalHistory) {
             $clinicalHistory->update(['status' => 0]); // Cambiar el estado a 0
         }
-
+            
         $this->confirmingDelete = false; // Cierra el modal
         $this->deleteId = null; // Limpia el ID
 
