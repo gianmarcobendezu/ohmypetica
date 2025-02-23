@@ -20,6 +20,9 @@ class BathReminders extends Component
         $this->bathReminders = ClinicalHistoryDetail::where('clinical_history_details.service', 'LIKE', '%baño%') // Filtra solo los baños
         ->leftJoin('clinical_histories', 'clinical_histories.id', '=', 'clinical_history_details.clinical_history_id') // Corrección del JOIN
         ->select('clinical_history_details.clinical_history_id', 'clinical_history_details.service_datetime', 'clinical_histories.pet_name') // Selecciona los datos correctos
+        ->where('clinical_history_details.idestado', '<>',0) // Selecciona los datos correctos
+        ->where('clinical_histories.status', '<>',0) // Selecciona los datos correctos
+
         ->orderBy('clinical_history_details.service_datetime', 'desc') // Ordena por fecha descendente (último baño primero)
         ->get()
         ->groupBy('clinical_history_id') // Agrupa por historia clínica (una por mascota)
