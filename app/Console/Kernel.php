@@ -10,6 +10,12 @@ class Kernel extends ConsoleKernel
     /**
      * Definir los comandos de Artisan para la aplicación.
      */
+
+     protected $commands = [
+        //        'App\Console\Commands\HelpCenter',
+                Commands\SendDailyBathReminder::class
+            ];
+
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');
@@ -24,5 +30,8 @@ class Kernel extends ConsoleKernel
     {
         // Ejecutar el recordatorio de baños diariamente a las 8 AM
         $schedule->command('bath:daily_reminder')->everyThreeMinutes();	
+        $schedule->call(function () {
+            Log::info('Test');
+        })->everyMinute();
     }
 }
