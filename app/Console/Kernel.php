@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // Ejecutar el recordatorio de baños diariamente a las 8 AM
-        $schedule->command('bath:daily_reminder')->everyThreeMinutes();	
+        $schedule->command('bath:daily_reminder')->dailyAt('13:00');	
         $schedule->call(function () {
             Log::info('Test');
         })->everyMinute();
