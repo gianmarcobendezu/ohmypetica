@@ -6,6 +6,6 @@ use Illuminate\Support\Facades\Schedule;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->houphprly();
+})->purpose('Display an inspiring quote')->hourly();
 
 Schedule::command('bath:daily_reminder')->dailyAt('13:00');
