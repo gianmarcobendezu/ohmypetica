@@ -34,9 +34,6 @@ Route::middleware([
     return view('auth.register', compact('roles'));
     })->name('register');
     */
-    
-
-
 
     //Route::get('/clinical-history', ClinicalHistoryComponent::class)->name('clinical-history');
     Route::get('/historia-clinica', ClinicalHistoryComponent::class)->name('clinical-history');

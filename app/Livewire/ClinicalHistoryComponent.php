@@ -79,21 +79,20 @@ class ClinicalHistoryComponent extends Component
     public function updatedPhotos()
 {
     if ($this->selectedHistory) {
-        $historyId = $this->selectedHistory;
-        $folderPath = "photos/{$historyId}"; // Carpeta específica para cada historia
+        $historyId = is_numeric($this->selectedHistory) ? $this->selectedHistory : (int) $this->selectedHistory;  
+        $folderPath = "photos/{$historyId}"; // Aseguramos que sea un número válido
 
         foreach ($this->photos as $photo) {
-            $filename = time() . '_' . $photo->getClientOriginalName();
+            $filename = time() . '_' . preg_replace('/[^A-Za-z0-9_\-\.]/', '', $photo->getClientOriginalName()); // Limpia caracteres inválidos
             $path = $photo->storeAs($folderPath, $filename, 'public');
 
             ClinicalHistoryPhoto::create([
                 'clinical_history_id' => $historyId,
-                'photo_path' => "{$folderPath}/{$filename}" // Guardamos la ruta relativa
+                'photo_path' => "{$folderPath}/{$filename}"
             ]);
         }
 
         $this->photos = [];
-        // session()->flash('message', 'Fotos subidas con éxito.');
     }
 }
 

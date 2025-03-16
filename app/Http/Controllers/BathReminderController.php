@@ -37,11 +37,11 @@ class BathReminderController extends Controller
 
         $totalBathsPending = $bathReminders->count();
 
-        //if ($totalBathsPending > 0) {
+        if ($totalBathsPending > 0) {
             $nombresMascotas = $bathReminders->pluck('pet_name')->implode(', ');
             $message = "📢 OhMyPetIca System: Tienes {$totalBathsPending} mascotas que necesitan baño: {$nombresMascotas}.";
             $smsService->sendSms($ownerPhone, $message);
-        //}
+        }
 
         return response()->json(['message' => 'Revisión completada']);
     }
