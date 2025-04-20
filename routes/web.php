@@ -5,6 +5,8 @@ use App\Livewire\ClinicalHistoryComponent;
 use App\Livewire\Services;
 use App\Livewire\Statistics;
 use App\Livewire\Sales;
+use App\Livewire\Inventories;
+use App\Livewire\CategoryComponent;
 use App\Livewire\BathReminders;
 use Spatie\Permission\Models\Role;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController; // Controlador de sesión para login
@@ -42,6 +44,8 @@ Route::middleware([
     Route::get('/bath-reminders', BathReminders::class)->name('bath-reminders');
 
     Route::get('/sales', Sales::class)->name('sales');
+    Route::get('/inventories', Inventories::class)->name('inventories');
+    Route::get('/category', CategoryComponent::class)->name('category');
 
 
 });
