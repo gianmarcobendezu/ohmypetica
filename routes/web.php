@@ -12,6 +12,14 @@ use Spatie\Permission\Models\Role;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController; // Controlador de sesión para login
 
 
+use App\Livewire\Orders\OrderIndex;
+
+use App\Http\Controllers\OrderController;
+use App\Livewire\Orders\OrderEdit;
+use App\Livewire\Orders\OrderCreate;
+
+
+
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -46,6 +54,18 @@ Route::middleware([
     Route::get('/sales', Sales::class)->name('sales');
     Route::get('/inventories', Inventories::class)->name('inventories');
     Route::get('/category', CategoryComponent::class)->name('category');
+    Route::get('/orders/create', OrderCreate::class)->name('orders.create');
 
+    Route::get('/orders/{id}', \App\Livewire\Orders\OrderShow::class)->name('orders.show');
+
+
+
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/{order}/print', [\App\Http\Controllers\OrderPrintController::class, 'show'])->name('orders.print');
+
+    Route::get('/orders', OrderIndex::class)->name('orders.index');
+    //Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
+    Route::get('/orders/{order}/edit', OrderEdit::class)->name('orders.edit');
 
 });
