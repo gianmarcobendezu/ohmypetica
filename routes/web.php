@@ -54,6 +54,8 @@ Route::middleware([
     Route::get('/sales', Sales::class)->name('sales');
     Route::get('/inventories', Inventories::class)->name('inventories');
     Route::get('/category', CategoryComponent::class)->name('category');
+    Route::get('/orders', OrderIndex::class)->name('orders.index');
+
     Route::get('/orders/create', OrderCreate::class)->name('orders.create');
 
     Route::get('/orders/{id}', \App\Livewire\Orders\OrderShow::class)->name('orders.show');
@@ -63,7 +65,6 @@ Route::middleware([
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}/print', [\App\Http\Controllers\OrderPrintController::class, 'show'])->name('orders.print');
 
-    Route::get('/orders', OrderIndex::class)->name('orders.index');
     //Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::get('/orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
     Route::get('/orders/{order}/edit', OrderEdit::class)->name('orders.edit');
