@@ -47,25 +47,21 @@ class OrderCreate extends Component
         $this->updateItemRow($name);
     }
 
-    public function updateItemRow($name)
-{
-    // Extraer el índice: "items.0.inventory_id" → 0
-    preg_match('/items\.(\d+)\./', $name, $matches);
-    $index = $matches[1] ?? null;
+    public function updateItemRow($index)
+    {
+        if (!isset($this->items[$index]['inventory_id'])) return;
 
-    if ($index === null || !isset($this->items[$index])) return;
+        $inventory = Inventory::find($this->items[$index]['inventory_id']);
 
-    $inventory = Inventory::find($this->items[$index]['inventory_id']);
+        if ($inventory) {
+            $this->items[$index]['unit_price'] = $inventory->price;
+        }
 
-    if ($inventory) {
-        $this->items[$index]['unit_price'] = $inventory->price;
+        $quantity = (float) $this->items[$index]['quantity'] ?? 0;
+        $price = (float) $this->items[$index]['unit_price'] ?? 0;
+
+        $this->items[$index]['subtotal'] = $quantity * $price;
     }
-
-    $quantity = (float) ($this->items[$index]['quantity'] ?? 0);
-    $unit_price = (float) ($this->items[$index]['unit_price'] ?? 0);
-
-    $this->items[$index]['subtotal'] = $quantity * $unit_price;
-}
 
 
     public function addItem()
