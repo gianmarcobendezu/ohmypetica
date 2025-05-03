@@ -116,8 +116,8 @@ class OrderEdit extends Component
 
         $this->validate([
             'clinical_history_id' => 'nullable|exists:clinical_histories,id',
-            'customer_name' => 'required',
-            'customer_phone' => 'required',
+            //'customer_name' => 'required',
+           // 'customer_phone' => 'required',
             'payment_method' => 'required',
             'order_datetime' => 'required|date',
         ]);

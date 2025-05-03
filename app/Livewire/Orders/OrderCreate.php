@@ -104,7 +104,9 @@ class OrderCreate extends Component
         $this->validate([
             'payment_method' => 'required',
             'order_datetime' => 'required|date',
+
         ]);
+        
 
         $order = Order::create([
             'clinical_history_id' => $this->clinical_history_id,
