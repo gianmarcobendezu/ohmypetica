@@ -18,8 +18,8 @@
         @livewireStyles
     </head>
     <body class="font-sans antialiased">
-        <x-banner />
-
+       <x-banner />
+      
         <div class="min-h-screen flex flex-col md:flex-row">
             <!-- Sidebar -->
             <div class="w-full md:w-64 bg-gray-100 text-white flex flex-col bg-white md:static" x-data="{ open: false }">
@@ -198,15 +198,12 @@
                 </main>
             </div>
         </div>
+        
+        @livewireScripts
 
         @stack('modals')
-<!---
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
--->
 
-        @livewireScripts
         
-        <!-- AlpineJS para manejar la interacción -->
-        
+      
     </body>
 </html>

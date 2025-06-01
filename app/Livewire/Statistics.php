@@ -7,8 +7,9 @@ use App\Models\Statistic;
 use App\Models\Service;
 use App\Models\ClinicalHistory;
 use App\Models\ClinicalHistoryDetail;
+use App\Models\Order;
 use Carbon\Carbon;
-
+use DB;
 
 class Statistics extends Component
 {
@@ -20,6 +21,8 @@ class Statistics extends Component
     public $totalServices;
     public $totalBañoServices;
     public $totalMascotas;
+    public $totalSalesOrders;
+    public $totalItemSales = 0;
 
     public function mount()
     {
@@ -53,8 +56,21 @@ class Statistics extends Component
         $this->totalSales = $totalSales;
 
         $this->totalServices = $this->services->count();
+        
+        $this->totalSalesOrders = Order::whereBetween('order_datetime', [$startOfMonth, $endOfMonth])
+            ->get();
 
+        $totalSalesOrders = $this->totalSalesOrders->sum('total');
+        $this->totalSalesOrders=$totalSalesOrders;
 
+         // 🔢 Total de ventas por ítems (desde order_items)
+            $totalSalesItems = DB::table('order_items')
+            ->leftJoin('orders', 'orders.id', '=', 'order_items.order_id')
+            ->whereBetween('orders.order_datetime', [$startOfMonth, $endOfMonth])
+            ->sum('order_items.subtotal');
+
+        // Puedes guardar este resultado en una variable pública
+        $this->totalItemSales = $totalSalesItems;
 
     }
 

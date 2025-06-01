@@ -19,7 +19,7 @@ class Inventories extends Component
     public $services;
 
   
-    public $description, $quantity, $price, $unit, $image, $idestado, $inventoryId;
+    public $description, $quantity, $price, $cost, $unit, $image, $idestado, $inventoryId;
     public $idcategoria;
     public $inventories;
     public $editMode = false;
@@ -41,6 +41,7 @@ public function addInventory() {
         'unit' => 'required',
         'idestado' => 'required|integer',
         'image' => 'nullable|image|max:2048',
+        'cost' => 'required|numeric|min:0'
         
     ]);
 
@@ -53,10 +54,11 @@ public function addInventory() {
         'unit' => $this->unit,
         'idestado' => $this->idestado,
         'image' => $imagePath,
-        'idcategoria' => $this->idcategoria
+        'idcategoria' => $this->idcategoria,
+        'cost' => $this->cost
     ]);
 
-    $this->reset(['description', 'quantity', 'price', 'unit', 'idestado', 'image','idcategoria']);
+    $this->reset(['description', 'quantity', 'price', 'unit', 'idestado', 'image','cost','idcategoria']);
     session()->flash('message', 'Inventario agregado correctamente.');
     $this->loadInventories();
 }
@@ -66,6 +68,7 @@ public function editInventory($id) {
     $this->description = $inventory->description;
     $this->quantity = $inventory->quantity;
     $this->price = $inventory->price;
+    $this->cost = $inventory->cost;
     $this->unit = $inventory->unit;
     $this->idestado = $inventory->idestado;
     $this->inventoryId = $id;
@@ -81,6 +84,7 @@ public function updateInventory()
         'description' => 'required',
         'quantity' => 'required|integer|min:0',
         'price' => 'required|numeric|min:0',
+        'cost' => 'required|numeric|min:0',
         'unit' => 'required',
         'idestado' => 'required|integer',
         'image' => 'nullable|image|max:1024', // Agregado para la imagen
@@ -103,6 +107,7 @@ public function updateInventory()
         'description' => $this->description,
         'quantity' => $this->quantity,
         'price' => $this->price,
+        'cost' => $this->cost,
         'unit' => $this->unit,
         'idestado' => $this->idestado,
         'image' => $inventory->image, // aseguramos que se guarde lo nuevo si hay
@@ -110,7 +115,7 @@ public function updateInventory()
 
     ]);
 
-    $this->reset(['description', 'quantity', 'price', 'unit', 'idestado', 'image', 'editMode', 'inventoryId','idcategoria']);
+    $this->reset(['description', 'quantity', 'price','cost' ,'unit', 'idestado', 'image', 'editMode', 'inventoryId','idcategoria']);
     session()->flash('message', 'Inventario actualizado.');
     $this->loadInventories();
 }

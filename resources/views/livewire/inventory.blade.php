@@ -27,6 +27,12 @@
             </div>
 
             <div>
+                <input type="number" wire:model="cost" step="0.01" placeholder="Costo"
+                    class="w-full border rounded px-3 py-2" />
+                @error('cost') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+            </div>
+
+            <div>
                 <input type="text" wire:model="unit" placeholder="Unidad de medida"
                     class="w-full border rounded px-3 py-2" />
                 @error('unit') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -79,6 +85,8 @@
                     <th class="px-4 py-2">Descripción</th>
                     <th class="px-4 py-2">Cantidad</th>
                     <th class="px-4 py-2">Precio</th>
+                    <th class="px-4 py-2">Costo</th>
+                    
                     <th class="px-4 py-2">Unidad</th>
                     <th class="px-4 py-2">Categoría</th>
 
@@ -94,6 +102,7 @@
                         <td class="px-4 py-2">{{ $item->description }}</td>
                         <td class="px-4 py-2">{{ $item->quantity }}</td>
                         <td class="px-4 py-2">S/ {{ number_format($item->price, 2) }}</td>
+                        <td class="px-4 py-2">S/ {{ number_format($item->cost, 2) }}</td>
                         <td class="px-4 py-2">{{ $item->unit }}</td>
                         <td class="px-4 py-2">{{ $item->category->name ?? 'Sin categoría' }}</td>
 

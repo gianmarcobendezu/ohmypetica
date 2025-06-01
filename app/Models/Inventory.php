@@ -15,7 +15,8 @@ class Inventory extends Model
         'unit',
         'image',
         'idcategoria',
-        'idestado' 
+        'idestado',
+        'cost' 
     ];
 
     public function category()

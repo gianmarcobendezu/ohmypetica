@@ -51,66 +51,101 @@
 
     {{-- Items del inventario --}}
     <h3 class="text-xl font-semibold mb-2">Productos</h3>
-
-@foreach ($items as $index => $item)
-    <div class="grid grid-cols-5 gap-2 items-center mb-2" wire:key="item-{{ $index }}">
-        
-        {{-- Select de productos --}}
-        <select 
-            wire:model="items.{{ $index }}.inventory_id"
-            wire:change="updateItemRow({{ $index }})"
-            class="border p-2 rounded"
-        >
-            <option value="">-- Producto --</option>
-            @foreach($inventories as $inv)
-                <option value="{{ $inv->id }}">{{ $inv->description }} (S/. {{ $inv->price }})</option>
-            @endforeach
-        </select>
-
-        {{-- Input de cantidad --}}
-        <input 
-            type="number"
-            wire:model.lazy="items.{{ $index }}.quantity"
-            wire:change="updateItemRow({{ $index }})"
-            min="1"
-            class="border p-2 rounded"
-            placeholder="Cantidad"
-        >
-
-        {{-- Precio unitario --}}
-        <input 
-            type="text"
-            wire:model="items.{{ $index }}.unit_price"
-            class="border p-2 rounded bg-gray-100"
-            readonly
-        >
-
-        {{-- Subtotal --}}
-        <input 
-            type="text"
-            wire:model="items.{{ $index }}.subtotal"
-            class="border p-2 rounded bg-gray-100"
-            readonly
-        >
-
-        {{-- Botón de eliminar --}}
-        <button 
-            type="button"
-            wire:click="removeItem({{ $index }})"
-            class="text-red-500 font-bold"
-        >
-            ✖
-        </button>
+    <div class="mb-4">
+        <input type="text"    wire:model.live="search" placeholder="Buscar producto..." class="w-full p-2 border rounded">
     </div>
-@endforeach
-    <button type="button" wire:click="addItem" class="mb-4 text-blue-600">+ Agregar producto</button>
+    
+    <p class="text-sm text-gray-500">Buscando: "{{ $search }}" — Resultados: {{ count($filteredInventories) }}</p>
 
+   
+<div class="overflow-x-auto whitespace-nowrap mb-6">
+    <div class="flex gap-4">
+        @foreach ($filteredInventories as $inv)
+            <div class="min-w-[200px] border rounded p-2 shadow hover:shadow-lg transition transform hover:scale-105 cursor-pointer"
+                 wire:click="selectProduct({{ $inv->id }})">
+                <img src="{{ asset('storage/' . $inv->image) }}" class="w-full h-32 object-cover mb-2 rounded" alt="imagen">
+                <h4 class="font-semibold text-sm truncate">{{ $inv->description }}</h4>
+                <p class="text-gray-700 text-sm">S/. {{ number_format($inv->price, 2) }}</p>
+            </div>
+        @endforeach
+    </div>
+</div>
+@if (count($items)>0)    
+<h3 class="text-xl font-semibold mb-2">Carrito de productos seleccionados</h3>
+
+    <div class="grid grid-cols-6 gap-2 items-center mb-2">
+        <label for="">Cantidad</label>
+        <label for="">Precio Unitario</label>
+        <label for="">Subtotal</label>
+
+        <label for="">Observacion</label>
+        <label for="">Producto</label>
+
+    </div>
+@endif
+
+    @foreach ($items as $index => $item)
+        <div class="grid grid-cols-6 gap-2 items-center mb-2" wire:key="item-{{ $index }}">
+            
+            {{-- Cantidad --}}
+            <input type="number"
+                wire:model.lazy="items.{{ $index }}.quantity"
+                wire:change="recalculateSubtotal({{ $index }})"
+                min="1"
+                class="border p-2 rounded"
+                placeholder="Cantidad"
+            />
+    
+            {{-- Precio unitario --}}
+            <input type="text"
+                wire:model.lazy="items.{{ $index }}.unit_price"
+                wire:change="recalculateSubtotal({{ $index }})"
+                class="border p-2 rounded"
+            />
+    
+            {{-- Subtotal --}}
+            <input type="text"
+                wire:model="items.{{ $index }}.subtotal"
+                class="border p-2 rounded bg-gray-100"
+                readonly
+            />
+    
+            {{-- Observación del producto --}}
+            <input type="text"
+                wire:model="items.{{ $index }}.observation"
+                class="border p-2 rounded"
+                placeholder="Nota / Observación"
+            />
+    
+            {{-- Producto seleccionado (nombre) --}}
+            <span class="text-sm text-gray-700">
+                {{ $item['product_name'] ?? '-' }}
+            </span>
+    
+            {{-- Botón de eliminar --}}
+            <button 
+                type="button"
+                wire:click="removeItem({{ $index }})"
+                class="text-red-500 font-bold"
+            >✖</button>
+            
+        </div>
+    @endforeach
+    <!---
+    <button type="button" wire:click="addItem" class="mb-4 text-blue-600">+ Agregar producto</button>
+    -->
+    
     {{-- Servicios clínicos --}}
     <h3 class="text-xl font-semibold mb-2 mt-6">Servicios</h3>
     @foreach ($services as $index => $srv)
         <div class="grid grid-cols-5 gap-2 items-center mb-2">
             <input type="text" wire:model="services.{{ $index }}.service" class="border p-2 rounded" placeholder="Nombre del servicio">
-            <input type="number" wire:model="services.{{ $index }}.rate" class="border p-2 rounded" placeholder="Tarifa">
+            <input type="number"
+            wire:model.lazy="services.{{ $index }}.rate"
+            wire:change="recalculateServiceRate({{ $index }})"
+            class="border p-2 rounded"
+            placeholder="Tarifa">
+            
             <input type="datetime-local" wire:model="services.{{ $index }}.service_datetime" class="border p-2 rounded">
             <input type="text" wire:model="services.{{ $index }}.observation" class="border p-2 rounded" placeholder="Observación">
             <button type="button" wire:click="removeService({{ $index }})" class="text-red-500 font-bold">✖</button>
