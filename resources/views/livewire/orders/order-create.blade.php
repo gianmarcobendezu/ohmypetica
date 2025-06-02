@@ -1,4 +1,4 @@
-<div class="p-6">
+<div class="p-6 max-w-6xl mx-auto bg-white shadow rounded">
     <h2 class="text-2xl font-bold mb-4">Registrar nueva orden</h2>
 
     @if (session()->has('success'))
@@ -52,7 +52,7 @@
     {{-- Items del inventario --}}
     <h3 class="text-xl font-semibold mb-2">Productos</h3>
     <div class="mb-4">
-        <input type="text"    wire:model.live="search" placeholder="Buscar producto..." class="w-full p-2 border rounded">
+        <input type="text" wire:model.live="search" placeholder="Buscar producto..." class="w-full p-2 border rounded">
     </div>
     
     <p class="text-sm text-gray-500">Buscando: "{{ $search }}" — Resultados: {{ count($filteredInventories) }}</p>
@@ -81,7 +81,7 @@
                 <span>Acción</span>
             </div>
         @endif
-        
+
 
     @foreach ($items as $index => $item)
         <div class="grid grid-cols-6 gap-2 items-center mb-2" wire:key="item-{{ $index }}">
