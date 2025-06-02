@@ -12,6 +12,8 @@
         <div class="text-green-500 mb-4">{{ session('message') }}</div>
     @endif
 
+
+    
     <!-- Tabla de servicios -->
     <div class="overflow-x-auto overflow-y-auto max-h-[500px]">
 
@@ -20,6 +22,7 @@
             <tr class="bg-gray-100">
                 <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">ID</th>
                 <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">Servicio</th>
+                <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">Mascota</th>
                 <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">Fecha y Hora</th>
                 <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">Tarifa</th>
                 <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700">Método de Pago</th>
@@ -31,6 +34,7 @@
                 <tr class="border-t">
                     <td class="py-3 px-4 text-sm text-gray-600">{{ $sale->id }}</td>
                     <td class="py-3 px-4 text-sm text-gray-600">{{ $sale->service }}</td>
+                    <td class="py-3 px-4 text-sm text-gray-600">{{ $sale->clinicalHistory->pet_name }}</td>
                     <td class="py-3 px-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($sale->service_datetime)->format('d/m/Y H:i') }}</td>
                     <td class="py-3 px-4 text-sm text-gray-600">{{ $sale->rate }}</td>
                     

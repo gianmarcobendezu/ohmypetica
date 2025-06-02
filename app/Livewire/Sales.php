@@ -19,7 +19,7 @@ class Sales extends Component
     {
         //$this->sales = ClinicalHistoryDetail::all();
         $this->sales = ClinicalHistoryDetail::where('idestado', '<>', 0)
-        ->orderBy('id', 'desc')
+        ->orderBy('service_datetime', 'desc')
         ->get();
 
     }

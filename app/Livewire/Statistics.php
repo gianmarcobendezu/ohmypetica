@@ -24,15 +24,33 @@ class Statistics extends Component
     public $totalSalesOrders;
     public $totalItemSales = 0;
 
+    public $selectedmonth;
+
     public function mount()
     {
+        $this->selectedmonth = now()->format('Y-m'); // valor por defecto: mes actual
         $this->loadServices();
+    }
+
+    /*public function updatedSelectedmonth()
+    {
+        $this->loadServices(); // recarga al cambiar el mes
+    }*/
+
+    public function filtrarMes()
+    {
+        $this->loadServices(); // llama la función que ya tienes
     }
 
     public function loadServices()
     {
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
+
+        [$year, $month] = explode('-', $this->selectedmonth);
+        $startOfMonth = Carbon::create($year, $month)->startOfMonth();
+        $endOfMonth = Carbon::create($year, $month)->endOfMonth();
+
+        //$startOfMonth = Carbon::now()->startOfMonth();
+        //$endOfMonth = Carbon::now()->endOfMonth();
 
         // Obtener los servicios del mes actual y calcular la suma del campo 'rate'
         $this->totalSales = ClinicalHistoryDetail::whereBetween('service_datetime', [$startOfMonth, $endOfMonth])

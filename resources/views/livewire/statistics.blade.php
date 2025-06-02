@@ -5,6 +5,19 @@
         </h2>
     </x-slot>
 
+    {{-- Filtro de mes --}}
+    {{-- Filtro de mes --}}
+    <div class="mb-6">
+        <label for="selectedmonth" class="block text-gray-700 font-semibold mb-2">Selecciona el mes:</label>
+        <div class="flex items-center gap-4">
+            <input type="month" id="selectedmonth" wire:model.defer="selectedmonth" class="border rounded p-2 shadow">
+            <button wire:click="filtrarMes" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Aplicar filtro
+            </button>
+        </div>
+    </div> 
+
+
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <div class="p-4 bg-white shadow-lg rounded-lg">
             <h2 class="text-2xl font-semibold text-gray-700 mb-4">Total de Ventas por Servicio del Mes</h2>

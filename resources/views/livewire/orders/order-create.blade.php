@@ -70,19 +70,18 @@
         @endforeach
     </div>
 </div>
-@if (count($items)>0)    
-<h3 class="text-xl font-semibold mb-2">Carrito de productos seleccionados</h3>
-
-    <div class="grid grid-cols-6 gap-2 items-center mb-2">
-        <label for="">Cantidad</label>
-        <label for="">Precio Unitario</label>
-        <label for="">Subtotal</label>
-
-        <label for="">Observacion</label>
-        <label for="">Producto</label>
-
-    </div>
-@endif
+@if (count($items)>0)
+            <h3 class="text-xl font-semibold mb-2">Carrito de productos seleccionados</h3>
+            <div class="grid grid-cols-6 gap-2 items-center mb-2 font-semibold text-sm text-gray-600">
+                <span>Cantidad</span>
+                <span>Precio Unitario</span>
+                <span>Subtotal</span>
+                <span>Observación</span>
+                <span>Producto</span>
+                <span>Acción</span>
+            </div>
+        @endif
+        
 
     @foreach ($items as $index => $item)
         <div class="grid grid-cols-6 gap-2 items-center mb-2" wire:key="item-{{ $index }}">
